@@ -1,0 +1,11 @@
+/.externalToolBuilders
+/.settings
+/target
+logs
+bin
+.DS_Store
+.classpath
+.project
+tomcat*
+*log*
+/src/main/resources/git.properties
