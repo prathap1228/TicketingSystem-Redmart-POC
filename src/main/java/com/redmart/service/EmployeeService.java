@@ -1,25 +1,17 @@
 package com.redmart.service;
 
-import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import com.redmart.DTO.EmployeeDetailsDTO;
-import com.redmart.domain.Counter;
 import com.redmart.domain.Employee;
-import com.redmart.domain.Foo;
 import com.redmart.repository.EmployeeRepository;
 
 /**
@@ -45,7 +37,7 @@ public class EmployeeService {
 		return employee;
 	}
 
-	public List<EmployeeDetailsDTO> getAllEmployees() {
+	public List<EmployeeDetailsDTO> getAllEmployees() throws IOException{
 		// TODO Auto-generated method stub
 		List<EmployeeDetailsDTO> employeeDetailsDTOs = new ArrayList<EmployeeDetailsDTO>();
 		List<Employee> employees = employeeRepository.findAll();

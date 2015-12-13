@@ -33,7 +33,7 @@ public class LoginController {
 		}
 		loginResultDTO = new LoginResultDTO();
 		loginResultDTO.setStatusCode(ApiResultType.NOT_AUTHORISED.getId());
-		loginResultDTO.setMessage("Error! Please try again later!!");
+		loginResultDTO.setMessage("Invalid Credentials");
 		return loginResultDTO;
 	}
 }

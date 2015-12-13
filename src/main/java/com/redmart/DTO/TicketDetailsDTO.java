@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import com.redmart.DTO.TicketDetailsWithCommentsDTO.TicketCommentsDTO;
 
 @JsonIgnoreType(value = true)
 public class TicketDetailsDTO implements Serializable{
@@ -21,9 +22,9 @@ public class TicketDetailsDTO implements Serializable{
 
 	private String emailId;
 
-	private Byte category;
+	private String category;
 
-	private Short status;
+	private String status;
 	
 	private Long loggedAt;
 
@@ -33,6 +34,7 @@ public class TicketDetailsDTO implements Serializable{
 	
 	private String comment;
 	
+	private List<TicketCommentsDTO> ticketCommentsDTOs;
 	//private List<TicketCommentsDTO> ticketCommentsDTOs;
 	
 	/*@JsonIgnoreType(value = true)
@@ -117,19 +119,19 @@ public class TicketDetailsDTO implements Serializable{
 		this.emailId = emailId;
 	}
 
-	public Byte getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(Byte category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 
-	public Short getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Short status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -163,6 +165,14 @@ public class TicketDetailsDTO implements Serializable{
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public List<TicketCommentsDTO> getTicketCommentsDTOs() {
+		return ticketCommentsDTOs;
+	}
+
+	public void setTicketCommentsDTOs(List<TicketCommentsDTO> ticketCommentsDTOs) {
+		this.ticketCommentsDTOs = ticketCommentsDTOs;
 	}
 
 	/*public List<TicketCommentsDTO> getTicketCommentsDTOs() {

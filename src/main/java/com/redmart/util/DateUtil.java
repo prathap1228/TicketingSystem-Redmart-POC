@@ -1,6 +1,7 @@
 package com.redmart.util;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 /**
  * 
@@ -11,6 +12,7 @@ public class DateUtil {
 
 	public static String getWelcomeMessageBasedOnTime() {
 		Calendar currentTimeCalendar = Calendar.getInstance();
+		currentTimeCalendar.setTimeZone(TimeZone.getTimeZone("IST"));
 		int hourOfDay = currentTimeCalendar.get(Calendar.HOUR_OF_DAY);
 		if(hourOfDay > 5 && hourOfDay < 12)
 			return "Good Morning";

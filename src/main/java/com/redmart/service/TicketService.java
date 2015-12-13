@@ -86,11 +86,13 @@ public class TicketService {
 			ticket.setTid(counterService.getNextSequence(MongoCounterCollectionType.TICKETS.getName()));
 
 		ticket.setAssignedTo(ticketDetailsDTO.getAssignedTo());
-		ticket.setCategory(ticketDetailsDTO.getCategory());
+		if(ticketDetailsDTO.getCategory() != null)
+			ticket.setCategory(Byte.valueOf(ticketDetailsDTO.getCategory()));
 		ticket.setContactNumber(ticketDetailsDTO.getContactNumber());
 		ticket.setEmailId(ticketDetailsDTO.getEmailId());
 		ticket.setName(ticketDetailsDTO.getName());
-		ticket.setStatus(ticketDetailsDTO.getStatus());
+		if(ticketDetailsDTO.getStatus() != null)
+			ticket.setStatus(Short.valueOf(ticketDetailsDTO.getStatus()));
 
 		if(ticketDetailsDTO.getComment() != null) {
 			TicketComments ticketComment = new TicketComments();
@@ -112,22 +114,29 @@ public class TicketService {
 		if(allTickets != null && !allTickets.isEmpty()) {
 			SimpleDateFormat dateformat = new SimpleDateFormat("MMM dd, yyyy HH:mm");
 			for(Ticket ticket : allTickets) {
-				ticketsDTO = new TicketsDTO();
-				Employee assignedToEmployee = employeeService.getEmployeeById(ticket.getAssignedTo());
-				if(assignedToEmployee != null)
-					ticketsDTO.setAssignedTo(assignedToEmployee.getName());
-				ticketsDTO.setCategory(TicketCategoryType.getById(ticket.getCategory()).getName());
-				ticketsDTO.setId(ticket.getTid());
-				ticketsDTO.setName(ticket.getName());
-				ticketsDTO.setStatus(TicketStatusType.getById(ticket.getStatus()).getName());
+				try {
+					ticketsDTO = new TicketsDTO();
+					Employee assignedToEmployee = employeeService.getEmployeeById(ticket.getAssignedTo());
+					if(assignedToEmployee != null)
+						ticketsDTO.setAssignedTo(assignedToEmployee.getName());
+					if(ticket.getCategory() != null)
+						ticketsDTO.setCategory(TicketCategoryType.getById(ticket.getCategory()).getName());
+					ticketsDTO.setId(ticket.getTid());
+					ticketsDTO.setName(ticket.getName());
+					if(ticket.getStatus() != null)
+						ticketsDTO.setStatus(TicketStatusType.getById(ticket.getStatus()).getName());
 
-				Employee raisedByEmployee = employeeService.getEmployeeById(ticket.getRaisedBy());
-				if(raisedByEmployee != null)
-					ticketsDTO.setRaisedBy(raisedByEmployee.getName());
-
-				Date date = new Date(ticket.getLoggedAt());
-				ticketsDTO.setLoggedAt(dateformat.format(date));
-				TicketsDTOs.add(ticketsDTO);
+					if(ticket.getRaisedBy() != null) {
+						Employee raisedByEmployee = employeeService.getEmployeeById(ticket.getRaisedBy());
+						if(raisedByEmployee != null)
+							ticketsDTO.setRaisedBy(raisedByEmployee.getName());
+					}
+					Date date = new Date(ticket.getLoggedAt());
+					ticketsDTO.setLoggedAt(dateformat.format(date));
+					TicketsDTOs.add(ticketsDTO);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return TicketsDTOs;

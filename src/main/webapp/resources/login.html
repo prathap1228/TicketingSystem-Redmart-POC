@@ -1,17 +1,53 @@
-<div>
-<form ng-controller="loginCtrl">
-    First Name:<br>
-    <input type="text" ng-model="user.userName"><br>
-    Last Name:<br>
-    <input type="text" ng-model="user.password">
-    <br><br>
-    <input type="submit" ng-click="login(user)" value="Login"> 
-  </form>
-  
-  <ul>
-  <li ng-repeat="x in details">
-    {{ x.name + ', ' + x.age }}
-  </li>
-</ul>
+<!-- <div align="center">
+
+	<form role="form" ng-controller="loginCtrl" >
+	<div align="center" style="inline">
+	 <div class="form-group">
+    <label class="control-label col-sm-2" for="inputUid">Username :</label>
+    <div class="col-sm-4">
+      <input type="text"  class="form-control"  id="inputUid" ng-model="user.uid">
+    </div>
+    </div>
+    </div>
+    <br>
+    <br>
+    <div class="form-group">
+    <label class="control-label col-sm-2" for="password">Password :</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control"  id="password" ng-model="user.password">
+    </div>
+    </div>
+	<br>
+	<br>
+		<div class="form-group"> 
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" ng-click="login(user)"  value="Login" class="btn btn-default">
+    </div>
   </div>
-		  
+  
+	</form>
+
+</div>
+ -->
+ <div class="container" ng-controller="loginCtrl">
+  <div class="row">
+    <div class="Absolute-Center is-Responsive">
+      <!-- <div id="logo-container"></div> -->
+      <div class="col-sm-12 col-md-10 col-md-offset-1">
+        <form action="" id="loginForm">
+          <div class="form-group input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input class="form-control" type="text" name='username' placeholder="username" ng-model="user.uid"/>          
+          </div>
+          <div class="form-group input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+            <input class="form-control" type="password" name='password' placeholder="password" ng-model="user.password"/>     
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-def btn-block" ng-click="login(user)">Login</button>
+          </div>
+        </form>        
+      </div>  
+    </div>    
+  </div>
+</div>

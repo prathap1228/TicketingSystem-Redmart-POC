@@ -1,6 +1,7 @@
 app = angular.module('Tickets', ['restangular']);
 app.config(function(RestangularProvider) {
-      RestangularProvider.setBaseUrl('http://localhost:8080/TicketingSystem/ticket');
+	//192.168.0.103:8080
+      RestangularProvider.setBaseUrl('http://localhost:8080/TicketingSystem');
   });
 app.config(['$routeProvider',function($routeProvider) {
 	
@@ -18,14 +19,18 @@ app.config(['$routeProvider',function($routeProvider) {
 	
 }]);
 app.controller('loginCtrl', function($scope, $location, Restangular,$rootScope) {
-	
+	console.log("tetsing");
 	$scope.login = function(user){
-		 Restangular.all("LoginService").post(user).then(function(response){
-			 alert(response);
-			 $rootScope.userId = response.userId;
+		console.log(user);
+		 Restangular.all("login").post(user).then(function(response){
+			 console.log(response);
 			 //$scope.status =  response.status;
-			 if ( response.status == 'success') {
-				 console.log("inside success");
+			 if (response.statusCode=="200") {
+				 $rootScope.userId = response.data.employeeId;
+				 $rootScope.userName = response.data.welcomeMessage;
+				 console.log(response.data+$scope.userName);
+				 $rootScope.assigneeList = Restangular.all("employees/all").getList();
+				 console.log($scope.assigneeList);
 				$location.path("/dashboard");
 			}else{
 				console.log("Username/  Password is incorrect");
@@ -34,23 +39,34 @@ app.controller('loginCtrl', function($scope, $location, Restangular,$rootScope) 
 	
 	};
 });
-app.controller('mainCtrl', function($scope, Restangular) {
-  $scope.tickets = Restangular.all('all').getList();
+app.controller('mainCtrl', function($scope, Restangular,$rootScope) {
+  $scope.tickets = Restangular.all('ticket/all').getList();
   console.log($scope.tickets);
+  $rootScope.assigneeList = Restangular.all("employees/all").getList();
+  
+	 console.log($scope.assigneeList);
   $scope.hideDashboard = false;
   $scope.hideTicketForm = true;
   $scope.commentsView = true;
   $scope.editTicket = function(ticket){
-	  $scope.ticket = ticket;
+	  Restangular.all("ticket/details").get(ticket.id).then(function(response){
+		  console.log('response:'+response);
+		  $scope.ticket = response;
+	  });
+	  
+	  console.log(ticket);
+	  console.log('new:'+$scope.ticket);
+	  //$scope.ticket = ticket;
 	  $scope.hideDashboard = true;
 	  $scope.hideTicketForm = false;
-	  Restangular.all("getUser").get(ticket.ticketId).then(function(response){
-		  $scope.commments = response.data.comments;
-	  });
 	  $scope.commentsView = false;
+	 /* Restangular.all("getUser").get(ticket.ticketId).then(function(response){
+		  $scope.commments = response.data.comments;
+	  });*/
   }; 
   
   $scope.createTicket = function(){
+	  $scope.ticket="";
 	  $scope.hideDashboard = true;
 	  $scope.hideTicketForm = false;
 	  $scope.commentsView = true;
@@ -59,25 +75,37 @@ app.controller('mainCtrl', function($scope, Restangular) {
   $scope.goToDashboard = function(){
 	  $scope.hideDashboard = false;
 	  $scope.hideTicketForm = true;
-  }
+  };
   $scope.addOrUpdateTicket = function(ticket){
-	  console.log(ticket);
-	  Restangular.all("save").post(ticket).then(function(response){
-		  
-		  if(response.status=="SUCCESS"){
+	  ticket.assignedTo = ticket.assignedTo.employeeId;
+	  ticket.raisedBy = $scope.userId;
+	  
+	  var tic = {};
+	  	tic.id = ticket.id;
+		tic.name = ticket.name;
+		tic.contactNumber = ticket.contactNumber;
+		tic.emailId = ticket.emailId;
+		tic.category = ticket.category;
+		tic.status = ticket.status;
+		//tic.loggedAt = ticket.loggedAt;
+		tic.assignedTo = ticket.assignedTo; 
+		tic.raisedBy = ticket.raisedBy;
+		tic.comment = ticket.comment;
+	  Restangular.all("ticket/save").post(tic).then(function(response){
+		  if(response.statusCode=="200"){
 			  $scope.tickets = {};
 			  console.log("After cleanup"+response);
-		 Restangular.all('getTicketList').getList().then(function(response){
+		 Restangular.all('ticket/all').getList().then(function(response){
 			 console.log(response);
 			 $scope.tickets = response;
 			  })
 				  ;
-			  alert("got the Response from server"+$scope.tickets);
+			  console.log("got the Response from server"+$scope.tickets);
 			  $scope.hideDashboard = false;
 			  $scope.hideTicketForm = true;
 		  }else{
-			  alert("Failed");
-			  cosole.log("Unable to Add/Update");
+			  console.log("Failed");
+			  console.log("Unable to Add/Update");
 		  }
 	  })
   }
