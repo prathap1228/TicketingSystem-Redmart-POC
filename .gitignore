@@ -7,5 +7,4 @@ bin
 .classpath
 .project
 tomcat*
-*log*
 /src/main/resources/git.properties
