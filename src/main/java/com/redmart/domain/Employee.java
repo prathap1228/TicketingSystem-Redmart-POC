@@ -1,6 +1,5 @@
 package com.redmart.domain;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -8,11 +7,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author prathap
  *
  */
-@Document(collection = "agents")
+@Document(collection = "employees")
 public class Employee {
 
-	@Id
-	private Integer id;
+	private int eid;
 	
 	private String name;
 	
@@ -21,12 +19,12 @@ public class Employee {
 	private String password;
 
 	
-	public Integer getId() {
-		return id;
+	public int getEid() {
+		return eid;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setEid(int eid) {
+		this.eid = eid;
 	}
 
 	public String getName() {

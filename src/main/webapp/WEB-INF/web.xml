@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 	<display-name>TicketingSystem</display-name>
 	<description>Ticket management system</description>
 
 	<welcome-file-list>
-	    <welcome-file>/index.html</welcome-file>
+		<welcome-file>/index.html</welcome-file>
 	</welcome-file-list>
 	<!-- Enable escaping of form submission contents -->
 	<context-param>
@@ -20,7 +21,8 @@
 		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
 	</context-param>
 
-	<!-- Location of Java @Configuration classes that configure the components that makeup this application -->
+	<!-- Location of Java @Configuration classes that configure the components 
+		that makeup this application -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>com.redmart.config.WebModuleConfiguration</param-value>
@@ -43,7 +45,8 @@
 		<servlet-name>springJavaConfigServlet</servlet-name>
 	</filter-mapping>
 
-	<!-- Enables support for DELETE and PUT request methods with web browser clients -->
+	<!-- Enables support for DELETE and PUT request methods with web browser 
+		clients -->
 	<filter>
 		<filter-name>HttpMethodFilter</filter-name>
 		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
@@ -51,6 +54,15 @@
 	<filter-mapping>
 		<filter-name>HttpMethodFilter</filter-name>
 		<servlet-name>springJavaConfigServlet</servlet-name>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>CorsFilter</filter-name>
+		<filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CorsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->

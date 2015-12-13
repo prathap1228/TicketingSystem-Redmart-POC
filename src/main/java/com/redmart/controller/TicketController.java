@@ -1,7 +1,10 @@
 package com.redmart.controller;
 
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -13,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.redmart.DTO.ApiResultDTO;
 import com.redmart.DTO.TicketDetailsDTO;
+import com.redmart.DTO.TicketsDTO;
 import com.redmart.service.TicketService;
-
 /**
  * 
  * @author prathap
@@ -32,5 +35,12 @@ public class TicketController {
 	@ResponseBody
 	public ApiResultDTO save(@RequestBody TicketDetailsDTO ticketDetailsDTO) {
 		return ticketService.save(ticketDetailsDTO);
+	}
+	
+	@RequestMapping(value = "/all", method = GET)
+	@ResponseStatus(OK)
+	@ResponseBody
+	public List<TicketsDTO> allTickets() {
+		return ticketService.getAllTickets();
 	}
 }
