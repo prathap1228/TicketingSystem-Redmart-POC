@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoURI;
 
@@ -35,7 +36,7 @@ public class MongoDbConfiguration extends AbstractMongoConfiguration {
 	public MongoURI mongoURI() {
 		LOGGER.info("connecting to db");
 		//MongoURI mongoURI = new MongoURI(System.getenv("MONGOHQ_URL"));
-		MongoURI mongoURI = new MongoURI("mongodb://heroku_hznbxmwg:happyhome123@ds027835.mongolab.com:27835/heroku_hznbxmwg");
+		MongoURI mongoURI = new MongoURI("mongodb://prathap:test@ds029595.mongolab.com:29595/heroku_zjxf5gd8");
 		assert mongoURI != null : "missing MONGOHQ_URL";
 		return mongoURI;
 	}

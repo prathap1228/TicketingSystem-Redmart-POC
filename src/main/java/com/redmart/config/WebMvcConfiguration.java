@@ -1,5 +1,7 @@
 package com.redmart.config;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +15,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
-import java.util.List;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,13 +37,13 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 		LOGGER.info("init");
 	}
 
-	/*@Bean
+	@Bean
 	public ViewResolver getViewResolver(){
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 		resolver.setPrefix("/WEB-INF/views/");
 		resolver.setSuffix(".html");
 		return resolver;
-	}*/
+	}
 	
 	/**
 	 * Added <tt>favicon.ico</tt> support per <a

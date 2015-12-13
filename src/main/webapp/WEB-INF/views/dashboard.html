@@ -1,0 +1,146 @@
+<div ng-controller="mainCtrl">
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">RedMart</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href ng-click="goToDashboard()">Dashboard</a></li>
+        <li><a href ng-click="createTicket()">Create Ticket</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<hr>
+<div class="dashboard" ng-hide="hideDashboard">
+	<label class="control-label col-sm-2" for="pwd">Search Tickets:</label>
+      <div class="col-sm-4">          
+        <input type="text" ng-model="search" class="form-control" placeholder="Search">
+      </div>
+      <table class="table table-responsive table-striped" st-table="rowCollection" class="table table-striped">
+        <thead>
+        <tr>
+          <th>TicketId</th>
+          <th>CustomerName</th>
+          <th>LoggedDate</th>
+          <th>CustomerLocation</th>
+          <th>CreatedBy</th>
+          <th>Category</th>
+          <th>AssignedTo</th>
+          <th>Status</th>
+          <th>Edit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="ticket in tickets | filter:search | orderBy:'name'">
+          <td>{{ticket.ticketId}}</td>
+          <td>{{ticket.customerName}}</td>
+          <td>{{ticket.loggedDate}}</td>
+          <td>{{ticket.customerLocation}}</td>
+          <td>{{ticket.createdBy}}</td>
+          <td>{{ticket.category}}</td>
+          <td>{{ticket.assignedTo}}</td>
+          <td>{{ticket.status}}</td>
+          
+          <td>
+        <button class="btn" ng-click="editTicket(ticket)">
+          <span class="glyphicon glyphicon-pencil"></span>  Edit
+        </button>
+      </td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+  
+<div class="ticketForm" ng-hide="hideTicketForm"">
+<h2>Add/Edit Ticket</h2>
+ <form class="form-horizontal" role="form">
+  <div class="form-group">
+   
+    <label class="control-label col-sm-2" for="Name">Customer Name:</label>
+   <div class="col-sm-6">
+      <input type="text" class="form-control" id="Name" ng-model="ticket.customerName">
+    </div>
+    </div>
+      <div class="form-group">
+    <label class="control-label col-sm-2" for="loc">Customer Location:</label>
+	<div class="col-sm-6">
+    <input type="text" class="form-control" id="loc" ng-model="ticket.customerLocation">
+    </div>
+    </div>
+      <div class="form-group">
+    <label class="control-label col-sm-2" for="log">Logged By:</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control"  id="log" ng-model="ticket.createdBy">
+    </div>
+    </div>
+  <div class="form-group" style="width:200px;;margin-left: 200px">
+      <label  for="cat">Select list (select one):</label>
+      <select class="form-control" id="cat" ng-model="ticket.category">
+        <option>Delivery Issues:</option>
+        <option>Payment Issues :</option>
+         <option>Cancellation :</option>
+      </select>
+      </div>
+   <!--    <div class="form-group">
+    <label class="control-label col-sm-2" for="cat">category:</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control"  id="cat" ng-model="ticket.category">
+    </div>
+    </div> -->
+      <div class="form-group">
+    <label class="control-label col-sm-2" for="email">eMail :</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control"  id="email" ng-model="ticket.email">
+    </div>
+    </div>
+      <div class="form-group">
+    <label class="control-label col-sm-2" for="cnNo">Contact No:</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control"  id="cnNO" ng-model="ticket.contactNo">
+    </div>
+    </div>
+      <div class="form-group">
+     <label class="control-label col-sm-2" for="comm">Comments:</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control"  id="comm" ng-model="ticket.comments.comment">
+    </div>
+    <div class="user">
+    <input type="text" hidden="true" ng-model="userId">
+    </div>
+    </div>
+    <div class="form-group"  style="width:200px;margin-left: 200px">
+      <label  for="status">Select list (select one):</label>
+      <select class="form-control" id="status" ng-model="ticket.status">
+        <option>Open</option>
+        <option>In-Progress</option>
+        <option>Closed</option>
+      </select>
+      </div>
+    <div class="form-group">
+    <div class="col-sm-6">
+    <input class ="btn btn-info" type="sumbit" value="Submit" ng-click="addOrUpdateTicket(ticket)"></div></div>
+</form>
+
+<div id="commentsDiv" ng-hide="commentsView">
+ <table class="table table-responsive table-striped" st-table="rowCollection" class="table table-striped">
+        <thead>
+        <tr>
+          <th>Comment</th>
+          <th>Commented Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="comment in comments ">
+          <td>{{comment.comment}}</td>
+          <td>{{comment.date}}</td>
+          <td>
+      </td>
+        </tr>
+        </tbody>
+      </table>
+  </div>
+
+</div>
+</div>

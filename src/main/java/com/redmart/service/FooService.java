@@ -42,7 +42,7 @@ public class FooService {
 	public List<Foo> getFoos() {
 		return repo.findAll();
 	}
-
+	
 	public void delete(UUID uuid) {
 		Foo found = repo.findOne(uuid);
 		if (found != null) {

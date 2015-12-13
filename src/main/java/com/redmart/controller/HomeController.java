@@ -6,13 +6,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 
+/**
+ * 
+ * @author prathap
+ *
+ */
 @Controller
 public class HomeController {
 
 	@RequestMapping("/")
-	@ResponseBody
 	public String hello() {
-		return "Hello from HelloController at " + new Date() + ".";
+		return "index";
 	}
 	
 	@RequestMapping("/agents")

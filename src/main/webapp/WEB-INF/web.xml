@@ -5,6 +5,9 @@
 	<display-name>TicketingSystem</display-name>
 	<description>Ticket management system</description>
 
+	<welcome-file-list>
+	    <welcome-file>/index.html</welcome-file>
+	</welcome-file-list>
 	<!-- Enable escaping of form submission contents -->
 	<context-param>
 		<param-name>defaultHtmlEscape</param-name>
@@ -73,6 +76,10 @@
 	<servlet-mapping>
 		<servlet-name>springJavaConfigServlet</servlet-name>
 		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>jsp</servlet-name>
+		<url-pattern>*.html</url-pattern>
 	</servlet-mapping>
 
 </web-app>
