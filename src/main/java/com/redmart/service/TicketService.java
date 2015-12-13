@@ -13,8 +13,10 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.google.common.util.concurrent.ExecutionError;
 import com.redmart.DTO.ApiResultDTO;
 import com.redmart.DTO.TicketDetailsDTO;
 import com.redmart.DTO.TicketDetailsWithCommentsDTO;
@@ -54,47 +56,54 @@ public class TicketService {
 	@Inject 
 	private MongoOperations mongo;
 	
-	public ApiResultDTO save(TicketDetailsDTO ticketDetailsDTO) {
+	/**
+	 * Save/update ticket into mongoDB
+	 * @param ticketDetailsDTO
+	 * @return
+	 */
+	public ApiResultDTO save(TicketDetailsDTO ticketDetailsDTO) throws Exception{
 		ApiResultDTO apiResultDTO = new ApiResultDTO();
 		
-		Ticket ticket = new Ticket();
+		Ticket ticket = null;
+		if(ticketDetailsDTO.getId() != null) {
+			ticket = getTicketDocByTicketId(ticketDetailsDTO.getId());
+			constructSaveUpdateTicketDetails(ticketDetailsDTO, ticket);
+			//mongo.updateFirst(query(where("tid").is(ticketDetailsDTO.getId())), ticket, Ticket.class);
+		}else {
+			ticket = new Ticket();
+			ticket.setLoggedAt(new Date().getTime());
+			ticket.setRaisedBy(ticketDetailsDTO.getRaisedBy());
+			ticket.setTid(counterService.getNextSequence(MongoCounterCollectionType.TICKETS.getName()));
+		}
+		
+		constructSaveUpdateTicketDetails(ticketDetailsDTO, ticket);
+		mongo.save(ticket);
+		
+		apiResultDTO.setStatusCode(ApiResultType.OK.getId());
+		apiResultDTO.setMessage("success");
+		
+		return apiResultDTO;
+	}
+
+	private void constructSaveUpdateTicketDetails(TicketDetailsDTO ticketDetailsDTO, Ticket ticket) {
 		ticket.setAssignedTo(ticketDetailsDTO.getAssignedTo());
 		ticket.setCategory(ticketDetailsDTO.getCategory());
 		ticket.setContactNumber(ticketDetailsDTO.getContactNumber());
 		ticket.setEmailId(ticketDetailsDTO.getEmailId());
-		ticket.setLoggedAt(new Date().getTime());
 		ticket.setName(ticketDetailsDTO.getName());
-		ticket.setRaisedBy(ticketDetailsDTO.getRaisedBy());
 		ticket.setStatus(ticketDetailsDTO.getStatus());
-		ticket.setTid(counterService.getNextSequence(MongoCounterCollectionType.TICKETS.getName()));
 		
-		//set comments
-		/*List<TicketCommentsDTO> ticketCommentsDTOs = ticketDetailsDTO.getTicketCommentsDTOs();
-		if(ticketCommentsDTOs != null && !ticketCommentsDTOs.isEmpty()) {
-			for(TicketCommentsDTO ticketCommentsDTO : ticketCommentsDTOs) {
-				TicketComments ticketComment = new TicketComments();
-				ticketComment.setAddedBy(ticketCommentsDTO.getAddedBy());
-				ticketComment.setComment(ticketCommentsDTO.getComment());
-				ticketComment.setCommentedDate(new Date().getTime());
-				ticketComment.setTid(ticket.getTid());
-				ticketCommentsService.save(ticketComment);
-			}
-		}*/
-		
-		TicketComments ticketComment = new TicketComments();
-		ticketComment.setAddedBy(ticketDetailsDTO.getRaisedBy());
-		ticketComment.setComment(ticketDetailsDTO.getComment());
-		ticketComment.setCommentedDate(new Date().getTime());
-		ticketComment.setTid(ticket.getTid());
-		ticketCommentsService.save(ticketComment);
-		
-		ticketRepository.save(ticket);
-		apiResultDTO.setStatusCode(ApiResultType.OK.getId());
-		apiResultDTO.setMessage("success");
-		return apiResultDTO;
+		if(ticketDetailsDTO.getComment() != null) {
+			TicketComments ticketComment = new TicketComments();
+			ticketComment.setAddedBy(ticketDetailsDTO.getRaisedBy());
+			ticketComment.setComment(ticketDetailsDTO.getComment());
+			ticketComment.setCommentedDate(new Date().getTime());
+			ticketComment.setTid(ticket.getTid());
+			ticketCommentsService.save(ticketComment);
+		}
 	}
 
-	public List<TicketsDTO> getAllTickets() {
+	public List<TicketsDTO> getAllTickets() throws Exception{
 		// TODO Auto-generated method stub
 		List<TicketsDTO> TicketsDTOs = new ArrayList<TicketsDTO>();
 		TicketsDTO ticketsDTO = null;
@@ -124,7 +133,7 @@ public class TicketService {
 		return TicketsDTOs;
 	}
 
-	public TicketDetailsWithCommentsDTO getTicketDetails(Integer ticketId) {
+	public TicketDetailsWithCommentsDTO getTicketDetails(Integer ticketId) throws Exception{
 		// TODO Auto-generated method stub
 		TicketDetailsWithCommentsDTO ticketDetailsWithCommentsDTO = null;
 		Ticket ticket = getTicketDocByTicketId(ticketId);

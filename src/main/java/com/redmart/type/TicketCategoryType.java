@@ -2,7 +2,7 @@ package com.redmart.type;
 
 public enum TicketCategoryType {
 	
-	DELIVERY((short) 0, "Delivery"), PAYMENT((short) 1, "Payment"), PRODUCT((short) 3, "Product");
+	DELIVERY((short) 0, "Delivery"), PAYMENT((short) 1, "Payment"), PRODUCT((short) 2, "Product");
 	
 	private final short id;
 	private final String name;

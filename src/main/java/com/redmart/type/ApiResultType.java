@@ -7,7 +7,7 @@ package com.redmart.type;
  */
 public enum ApiResultType {
 	
-	BAD_REQUEST(400), OK(200), NOT_AVAILABLE(404),SERVICE_UNAVAILABLE(500), NOT_AUTHORISED(401);
+	BAD_REQUEST(400), OK(200), NOT_AVAILABLE(404),INTERNAL_SERVER_ERROR(500), NOT_AUTHORISED(401);
 	
 	private final Integer id;
 

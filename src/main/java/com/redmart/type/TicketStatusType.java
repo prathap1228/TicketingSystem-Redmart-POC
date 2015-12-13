@@ -7,7 +7,7 @@ package com.redmart.type;
  */
 public enum TicketStatusType {
 	
-	OPEN((short) 0, "Open"), PENDING((short) 1, "Pending"), CLOSED((short) 3, "Closed");
+	OPEN((short) 0, "Open"), PENDING((short) 1, "Pending"), CLOSED((short) 2, "Closed");
 	
 	private final short id;
 	private final String name;

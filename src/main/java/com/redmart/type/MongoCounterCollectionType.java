@@ -1,7 +1,7 @@
 package com.redmart.type;
 
 public enum MongoCounterCollectionType {
-	TICKETS((short) 0, "tickets"), USERS((short) 1, "users"), AGENTS((short) 3, "agents");
+	TICKETS((short) 0, "tickets"), USERS((short) 1, "users"), AGENTS((short) 2, "agents");
 
 	private final short id;
 	private final String name;
