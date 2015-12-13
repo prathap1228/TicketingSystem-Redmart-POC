@@ -38,24 +38,24 @@ import com.redmart.type.TicketStatusType;
  */
 @Service
 public class TicketService {
-	
+
 	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	@Inject
 	private TicketRepository ticketRepository;
-	
+
 	@Inject
 	private CounterService counterService;
-	
+
 	@Inject
 	private TicketCommentsService ticketCommentsService;
-	
+
 	@Inject
 	private EmployeeService employeeService;
-	
+
 	@Inject 
 	private MongoOperations mongo;
-	
+
 	/**
 	 * Save/update ticket into mongoDB
 	 * @param ticketDetailsDTO
@@ -63,36 +63,35 @@ public class TicketService {
 	 */
 	public ApiResultDTO save(TicketDetailsDTO ticketDetailsDTO) throws Exception{
 		ApiResultDTO apiResultDTO = new ApiResultDTO();
-		
+
 		Ticket ticket = null;
-		if(ticketDetailsDTO.getId() != null) {
-			ticket = getTicketDocByTicketId(ticketDetailsDTO.getId());
-			constructSaveUpdateTicketDetails(ticketDetailsDTO, ticket);
-			//mongo.updateFirst(query(where("tid").is(ticketDetailsDTO.getId())), ticket, Ticket.class);
-		}else {
-			ticket = new Ticket();
-			ticket.setLoggedAt(new Date().getTime());
-			ticket.setRaisedBy(ticketDetailsDTO.getRaisedBy());
-			ticket.setTid(counterService.getNextSequence(MongoCounterCollectionType.TICKETS.getName()));
-		}
-		
-		constructSaveUpdateTicketDetails(ticketDetailsDTO, ticket);
+		if(ticketDetailsDTO.getId() != null) 
+			mongo.remove(query(where("tid").is(ticketDetailsDTO.getId())), Ticket.class);
+		ticket = constructSaveUpdateTicketDetails(ticketDetailsDTO);
 		mongo.save(ticket);
-		
+
 		apiResultDTO.setStatusCode(ApiResultType.OK.getId());
 		apiResultDTO.setMessage("success");
-		
+
 		return apiResultDTO;
 	}
 
-	private void constructSaveUpdateTicketDetails(TicketDetailsDTO ticketDetailsDTO, Ticket ticket) {
+	private Ticket constructSaveUpdateTicketDetails(TicketDetailsDTO ticketDetailsDTO) {
+		Ticket ticket = new Ticket();
+		ticket.setLoggedAt(new Date().getTime());
+		ticket.setRaisedBy(ticketDetailsDTO.getRaisedBy());
+		if(ticketDetailsDTO.getId() != null)
+			ticket.setTid(ticketDetailsDTO.getId());
+		else	
+			ticket.setTid(counterService.getNextSequence(MongoCounterCollectionType.TICKETS.getName()));
+
 		ticket.setAssignedTo(ticketDetailsDTO.getAssignedTo());
 		ticket.setCategory(ticketDetailsDTO.getCategory());
 		ticket.setContactNumber(ticketDetailsDTO.getContactNumber());
 		ticket.setEmailId(ticketDetailsDTO.getEmailId());
 		ticket.setName(ticketDetailsDTO.getName());
 		ticket.setStatus(ticketDetailsDTO.getStatus());
-		
+
 		if(ticketDetailsDTO.getComment() != null) {
 			TicketComments ticketComment = new TicketComments();
 			ticketComment.setAddedBy(ticketDetailsDTO.getRaisedBy());
@@ -101,13 +100,14 @@ public class TicketService {
 			ticketComment.setTid(ticket.getTid());
 			ticketCommentsService.save(ticketComment);
 		}
+		return ticket;
 	}
 
 	public List<TicketsDTO> getAllTickets() throws Exception{
 		// TODO Auto-generated method stub
 		List<TicketsDTO> TicketsDTOs = new ArrayList<TicketsDTO>();
 		TicketsDTO ticketsDTO = null;
-		
+
 		List<Ticket> allTickets = ticketRepository.findAll();
 		if(allTickets != null && !allTickets.isEmpty()) {
 			SimpleDateFormat dateformat = new SimpleDateFormat("MMM dd, yyyy HH:mm");
@@ -120,11 +120,11 @@ public class TicketService {
 				ticketsDTO.setId(ticket.getTid());
 				ticketsDTO.setName(ticket.getName());
 				ticketsDTO.setStatus(TicketStatusType.getById(ticket.getStatus()).getName());
-				
+
 				Employee raisedByEmployee = employeeService.getEmployeeById(ticket.getRaisedBy());
 				if(raisedByEmployee != null)
 					ticketsDTO.setRaisedBy(raisedByEmployee.getName());
-				
+
 				Date date = new Date(ticket.getLoggedAt());
 				ticketsDTO.setLoggedAt(dateformat.format(date));
 				TicketsDTOs.add(ticketsDTO);
@@ -172,12 +172,12 @@ public class TicketService {
 		}
 		return ticketDetailsWithCommentsDTO;
 	}
-	
+
 	public Ticket getTicketDocByTicketId(Integer ticketId) {
 		Ticket ticket = mongo.findOne(
-			      query(where("tid").is(ticketId)), 
-			      Ticket.class);
-				return ticket;
+				query(where("tid").is(ticketId)), 
+				Ticket.class);
+		return ticket;
 	}
 
 }
