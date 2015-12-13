@@ -108,6 +108,7 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>jquery-cookie</artifactId>
 		</dependency>
+		 
 		<!-- end lexicographically ordered dependencies -->
 
 	</dependencies>

@@ -1,15 +1,15 @@
 app = angular.module('Tickets', ['restangular']);
 app.config(function(RestangularProvider) {
-      RestangularProvider.setBaseUrl('http://localhost:8080/TicketingSystem');
+      RestangularProvider.setBaseUrl('http://localhost:8080/TicketingSystem/ticket');
   });
 app.config(['$routeProvider',function($routeProvider) {
 	
 	$routeProvider.when('/login', {
-		templateUrl: 'login.html',
+		templateUrl: 'resources/login.html',
 		controller : 'loginCtrl'
 	}).
 	when('/dashboard', {
-		templateUrl: 'dashboard.html',
+		templateUrl: 'resources/dashboard.html',
 		controller : 'mainCtrl'
 	}).
 	otherwise({
@@ -35,7 +35,7 @@ app.controller('loginCtrl', function($scope, $location, Restangular,$rootScope) 
 	};
 });
 app.controller('mainCtrl', function($scope, Restangular) {
-  $scope.tickets = Restangular.all('getTicketList').getList();
+  $scope.tickets = Restangular.all('all').getList();
   console.log($scope.tickets);
   $scope.hideDashboard = false;
   $scope.hideTicketForm = true;
@@ -61,7 +61,8 @@ app.controller('mainCtrl', function($scope, Restangular) {
 	  $scope.hideTicketForm = true;
   }
   $scope.addOrUpdateTicket = function(ticket){
-	  Restangular.all("/ticket/save").post(ticket).then(function(response){
+	  console.log(ticket);
+	  Restangular.all("save").post(ticket).then(function(response){
 		  
 		  if(response.status=="SUCCESS"){
 			  $scope.tickets = {};

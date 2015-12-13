@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
 
-@JsonIgnoreType(value = true)
-public class TicketDetailsDTO implements Serializable{
+public class TicketDetailsWithCommentsDTO implements Serializable {
+
 
 	/**
 	 * 
@@ -25,29 +25,27 @@ public class TicketDetailsDTO implements Serializable{
 
 	private Short status;
 	
-	private Long loggedAt;
+	private String loggedAt;
 
 	private Integer assignedTo;
 
 	private Integer raisedBy;
 	
-	private String comment;
+	private List<TicketCommentsDTO> ticketCommentsDTOs;
 	
-	//private List<TicketCommentsDTO> ticketCommentsDTOs;
-	
-	/*@JsonIgnoreType(value = true)
+	@JsonIgnoreType(value = true)
 	public static class TicketCommentsDTO implements Serializable{
 		
-		*//**
+		/**
 		 * 
-		 *//*
+		 */
 		private static final long serialVersionUID = 1L;
 
 		private Integer id;
 		
 		private String comment;
 		
-		private Long commentedDate;
+		private String commentedDate;
 		
 		private Integer addedBy;
 
@@ -67,11 +65,11 @@ public class TicketDetailsDTO implements Serializable{
 			this.comment = comment;
 		}
 
-		public Long getCommentedDate() {
+		public String getCommentedDate() {
 			return commentedDate;
 		}
 
-		public void setCommentedDate(Long commentedDate) {
+		public void setCommentedDate(String commentedDate) {
 			this.commentedDate = commentedDate;
 		}
 
@@ -83,7 +81,7 @@ public class TicketDetailsDTO implements Serializable{
 			this.addedBy = addedBy;
 		}
 		
-	}*/
+	}
 
 	public Integer getId() {
 		return id;
@@ -133,11 +131,11 @@ public class TicketDetailsDTO implements Serializable{
 		this.status = status;
 	}
 
-	public Long getLoggedAt() {
+	public String getLoggedAt() {
 		return loggedAt;
 	}
 
-	public void setLoggedAt(Long loggedAt) {
+	public void setLoggedAt(String loggedAt) {
 		this.loggedAt = loggedAt;
 	}
 
@@ -157,21 +155,15 @@ public class TicketDetailsDTO implements Serializable{
 		this.raisedBy = raisedBy;
 	}
 
-	public String getComment() {
-		return comment;
-	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
-	/*public List<TicketCommentsDTO> getTicketCommentsDTOs() {
+	public List<TicketCommentsDTO> getTicketCommentsDTOs() {
 		return ticketCommentsDTOs;
 	}
 
 	public void setTicketCommentsDTOs(List<TicketCommentsDTO> ticketCommentsDTOs) {
 		this.ticketCommentsDTOs = ticketCommentsDTOs;
-	}*/
+	}
 	
 
-}	
+
+}
