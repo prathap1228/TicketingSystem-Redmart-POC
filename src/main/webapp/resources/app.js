@@ -1,7 +1,8 @@
 app = angular.module('Tickets', ['restangular']);
 app.config(function(RestangularProvider) {
 	//192.168.0.103:8080
-      RestangularProvider.setBaseUrl('https://fierce-badlands-9753.herokuapp.com');
+      //RestangularProvider.setBaseUrl('https://fierce-badlands-9753.herokuapp.com');
+	RestangularProvider.setBaseUrl('http://localhost:8080/TicketingSystem');
   });
 app.config(['$routeProvider',function($routeProvider) {
 	
@@ -49,20 +50,24 @@ app.controller('mainCtrl', function($scope, Restangular,$rootScope) {
   $scope.hideTicketForm = true;
   $scope.commentsView = true;
   $scope.editTicket = function(ticket){
-	  Restangular.all("ticket/details").get(ticket.id).then(function(response){
-		  console.log('response:'+response);
-		  $scope.ticket = response;
-	  });
-	  
-	  console.log(ticket);
-	  console.log('new:'+$scope.ticket);
-	  //$scope.ticket = ticket;
-	  $scope.hideDashboard = true;
-	  $scope.hideTicketForm = false;
-	  $scope.commentsView = false;
-	 /* Restangular.all("getUser").get(ticket.ticketId).then(function(response){
-		  $scope.commments = response.data.comments;
-	  });*/
+	  if(ticket.status === "Closed") {
+		  alert("This ticket already closed. You can't edit it.")
+	  }else{
+		  Restangular.all("ticket/details").get(ticket.id).then(function(response){
+			  console.log('response:'+response);
+			  $scope.ticket = response;
+		  });
+		  
+		  console.log(ticket);
+		  console.log('new:'+$scope.ticket);
+		  //$scope.ticket = ticket;
+		  $scope.hideDashboard = true;
+		  $scope.hideTicketForm = false;
+		  $scope.commentsView = false;
+		 /* Restangular.all("getUser").get(ticket.ticketId).then(function(response){
+			  $scope.commments = response.data.comments;
+		  });*/
+	  }
   }; 
   
   $scope.createTicket = function(){
@@ -77,36 +82,36 @@ app.controller('mainCtrl', function($scope, Restangular,$rootScope) {
 	  $scope.hideTicketForm = true;
   };
   $scope.addOrUpdateTicket = function(ticket){
-	  ticket.assignedTo = ticket.assignedTo.employeeId;
-	  ticket.raisedBy = $scope.userId;
-	  
-	  var tic = {};
-	  	tic.id = ticket.id;
-		tic.name = ticket.name;
-		tic.contactNumber = ticket.contactNumber;
-		tic.emailId = ticket.emailId;
-		tic.category = ticket.category;
-		tic.status = ticket.status;
-		//tic.loggedAt = ticket.loggedAt;
-		tic.assignedTo = ticket.assignedTo; 
-		tic.raisedBy = ticket.raisedBy;
-		tic.comment = ticket.comment;
-	  Restangular.all("ticket/save").post(tic).then(function(response){
-		  if(response.statusCode=="200"){
-			  $scope.tickets = {};
-			  console.log("After cleanup"+response);
-		 Restangular.all('ticket/all').getList().then(function(response){
-			 console.log(response);
-			 $scope.tickets = response;
-			  })
-				  ;
-			  console.log("got the Response from server"+$scope.tickets);
-			  $scope.hideDashboard = false;
-			  $scope.hideTicketForm = true;
-		  }else{
-			  console.log("Failed");
-			  console.log("Unable to Add/Update");
-		  }
-	  })
+		  ticket.assignedTo = ticket.assignedTo.employeeId;
+		  ticket.raisedBy = $scope.userId;
+		  
+		  var tic = {};
+		  	tic.id = ticket.id;
+			tic.name = ticket.name;
+			tic.contactNumber = ticket.contactNumber;
+			tic.emailId = ticket.emailId;
+			tic.category = ticket.category;
+			tic.status = ticket.status;
+			//tic.loggedAt = ticket.loggedAt;
+			tic.assignedTo = ticket.assignedTo; 
+			tic.raisedBy = ticket.raisedBy;
+			tic.comment = ticket.comment;
+		  Restangular.all("ticket/save").post(tic).then(function(response){
+			  if(response.statusCode=="200"){
+				  $scope.tickets = {};
+				  console.log("After cleanup"+response);
+			 Restangular.all('ticket/all').getList().then(function(response){
+				 console.log(response);
+				 $scope.tickets = response;
+				  })
+					  ;
+				  console.log("got the Response from server"+$scope.tickets);
+				  $scope.hideDashboard = false;
+				  $scope.hideTicketForm = true;
+			  }else{
+				  console.log("Failed");
+				  console.log("Unable to Add/Update");
+			  }
+		  })
   }
 });

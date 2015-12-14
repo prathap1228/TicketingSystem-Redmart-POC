@@ -116,9 +116,11 @@ public class TicketService {
 			for(Ticket ticket : allTickets) {
 				try {
 					ticketsDTO = new TicketsDTO();
-					Employee assignedToEmployee = employeeService.getEmployeeById(ticket.getAssignedTo());
-					if(assignedToEmployee != null)
-						ticketsDTO.setAssignedTo(assignedToEmployee.getName());
+					if(ticket.getAssignedTo() != null) {
+						Employee assignedToEmployee = employeeService.getEmployeeById(ticket.getAssignedTo());
+						if(assignedToEmployee != null)
+							ticketsDTO.setAssignedTo(assignedToEmployee.getName());
+					}
 					if(ticket.getCategory() != null)
 						ticketsDTO.setCategory(TicketCategoryType.getById(ticket.getCategory()).getName());
 					ticketsDTO.setId(ticket.getTid());
