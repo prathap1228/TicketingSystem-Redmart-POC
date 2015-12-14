@@ -1,8 +1,8 @@
 app = angular.module('Tickets', ['restangular']);
 app.config(function(RestangularProvider) {
 	//192.168.0.103:8080
-      //RestangularProvider.setBaseUrl('https://fierce-badlands-9753.herokuapp.com');
-	RestangularProvider.setBaseUrl('http://localhost:8080/TicketingSystem');
+      RestangularProvider.setBaseUrl('https://fierce-badlands-9753.herokuapp.com');
+	//RestangularProvider.setBaseUrl('http://localhost:8080/TicketingSystem');
   });
 app.config(['$routeProvider',function($routeProvider) {
 	
